@@ -1,0 +1,31 @@
+#/usr/bin/env bash
+
+# KALI SETUP SCRIPT
+#  
+# - Setup non-root uxer
+# - Install core system updates
+# - Setup dev
+
+function run! {
+	update_system
+	install_libs
+	create_user
+	setup_bash
+	setup_vim
+	setup_keymaps
+	change_hostname
+	setup_gitconfig
+	setup_crontab
+	setup_storage
+	package_dotfiles
+}
+
+
+function clean {
+}
+
+
+
+
+
+
