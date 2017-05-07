@@ -20,8 +20,25 @@ function run! {
 	package_dotfiles
 }
 
+function setup_temp_git {
+	git config --global git.email "Trailer@bob.com"
+	git config --global git.name "Trailer Bob"
+}
+
+function setup_ssh {
+	cd ~
+	dialog("Generating keypairs, You'll need to enter your password.")
+	ssh-keygen
+}
+
 
 function clean {
+	rm -rf /root/.ssh
+	rm /root/.gitconfig
+	rm /root/.bashrc && touch /root/.bashrc
+	rm /root/.bash_profile && touch /root/.bash_profile
+	rm /root/.vimrc
+		
 }
 
 
