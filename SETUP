@@ -6,6 +6,23 @@
 # - Install core system updates
 # - Setup dev
 
+$USER=sysadmin
+$HOSTNAME=netmon1
+
+
+# global pkgs
+$PKG_LIST=(	vim \ 
+		git \ 
+		curl \ 
+		ack \
+		inetutils* \
+		kernel-package \
+		libssl-dev \
+		openssl \
+		vim-pathogen \
+		tshark \
+		)
+
 function run! {
 	update_system
 	install_libs
@@ -14,9 +31,6 @@ function run! {
 	setup_vim
 	setup_keymaps
 	change_hostname
-	setup_gitconfig
-	setup_crontab
-	setup_storage
 	package_dotfiles
 }
 
@@ -27,19 +41,13 @@ function update_system {
 }
 
 function install_libs {
-	sudo apt-get install -y	vim \
-				git \
-				curl \
-				ack \
-				inetutils* \
-				kernel-package \
-				libssl-dev \
-				openssl \
-				vim-pathogen \
-				tshark \
+	dialog('Installing pkg list...')
+	sudo apt-get install -y $PKG_LIST	
 }
 
 function create_user {
+	dialog('Creating user "$USER"...')
+	mkdir -p /home/$USER
 	useradd -s /bin/bash -d /home/$USER $USER
 	chmod -R /home/$USER $USER
 	chmod -R /root/Desktop $USER
@@ -49,6 +57,7 @@ function create_user {
 }
 
 function setup_bash {
+	dialog('Setting up bash env...')
 	touch /home/$USER/.bashrc
 	touch /home/$USER/.bash_profile
 	touch /home/$USER/.bash_prompt
@@ -65,6 +74,7 @@ function setup_bash {
 }
 
 function setup_vim {
+	dialog('Setting up vim...')
 	touch /root/.vimrc
 	touch /home/$USER/.vimrc
 	mkdir /root/.vim/bundle -p
@@ -72,17 +82,17 @@ function setup_vim {
 }
 
 function setup_keymaps {
+	dialog('Setting up keymaps..')
 	echo '$(cat /etc/defaults/keyboard | grep XBOPTIONS)' >> /tmp/km
 	echo 'XBOPTIONS="ctrl:nocaps"'
 	cat /tmp/km > /etc/default/keyboard
 }
 
 function change_hostname {
+	dialog('Changing hostname to "$HOST"...')
 	echo $HOSTNAME > /etc/hostname
 	sed -i 's/kali/$HOSTNAME/g' /etc/hosts
 }
-
-
 
 function setup_temp_git {
 	dialog('Setting up temporary git user...')
@@ -91,7 +101,7 @@ function setup_temp_git {
 }
 
 function setup_ssh {
-	dialog('Generating new ssh_key')
+	dialog('Generating new ssh_key for root...')
 	cd ~
 	dialog("Generating keypairs, You'll need to enter your password.")
 	ssh-keygen
@@ -99,16 +109,22 @@ function setup_ssh {
 
 
 function clean {
+	warning("You've just deleted all your work.")
+	# clean root
 	rm -rf /root/.ssh
 	rm /root/.gitconfig
 	rm /root/.bashrc && touch /root/.bashrc
 	rm /root/.bash_profile && touch /root/.bash_profile
 	rm -rf /root/.vim*
 		
+	# clean user
 	rm -rf /home/$USER
 	rm -rf /home/$USER/.vim*
 	chmod /root/Desktop root
 	chmod /root/Downloads root
+	
+	# clean installs
+	sudo apt-get remove -y	$PKG_LIST
 }
 
 
