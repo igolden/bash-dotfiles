@@ -146,7 +146,7 @@ function warning(text) {
 	echo "******************************"
 	echo "******     WARNING     *******"
 	echo "|| "
-	echo "||  $text" | awk '{print toupper($0)}'"
+	echo "||  $text" | awk '{print toupper($0)}'
 	echo "|| "
 	echo "******************************"
 	echo "******************************"
