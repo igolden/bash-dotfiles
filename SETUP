@@ -9,10 +9,11 @@
 #-------------------------------------
 
 echo 'Choose the hostname you want for this system:'
-#read _HOSTNAME
-#echo 'What do you want to name your main sudo user?'
-#read _USER 
-#echo 'Thanks. Initializing setup...'
+read _HOSTNAME
+echo 'What do you want to name your main sudo user?'
+read _USER 
+
+echo 'Thanks. Initializing setup...'
 
 # global pkgs
 PKG_LIST=( vim git curl ack inetutils* kernel-package libssl-dev openssl vim-pathogen tshark )	
@@ -132,22 +133,22 @@ function clean {
 
 
 function warning {
-	echo "******************************"
-	echo "******     WARNING     *******"
+	echo "*********************************************************"
+	echo "******************     WARNING     **********************"
 	echo "|| "
 	echo "  $1" | awk "{print toupper($0)}"
 	echo "|| "
-	echo "******************************"
-	echo "******************************"
+	echo "*********************************************************"
+	echo "*********************************************************"
 }
 
 function dialog {
-	echo "*============================="
+	echo "*========================================================"
 	echo "|| "
 	echo "||  $1"
 	echo "|| "
-	echo "*============================="
+	echo "*========================================================"
 }
 
 
-
+run!
