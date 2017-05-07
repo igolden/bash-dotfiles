@@ -37,6 +37,7 @@ function run! {
 	setup_keymaps
 	change_hostname
 	package_dotfiles
+	set_user_permissions
 }
 
 function update_system {
@@ -54,12 +55,15 @@ function create_user {
 	dialog('Creating user "$_USER"...')
 	mkdir -p /home/$_USER
 	useradd -s /bin/bash -d /home/$_USER $_USER
+	ln -s /root/Desktop /home/$_USER/Desktop
+	ln -s /root/Downloads /home/$_USER/Downloads
+	echo "$_USER	ALL=(ALL:ALL) ALL"
+}
+
+function set_user_permissions {
 	chmod -R /home/$_USER $_USER
 	chmod -R /root/Desktop $_USER
 	chmod -R /root/Downloads $_USER
-	ln -s /root/Desktop /home/$_USER/desktop
-	ln -s /root/Downloads /home/$_USER/Downloads
-	echo "$_USER	ALL=(ALL:ALL) ALL"
 }
 
 function setup_bash {
