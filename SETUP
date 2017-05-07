@@ -73,16 +73,15 @@ function setup_bash {
 	touch /home/$_USER/.bash_prompt
 	touch /home/$_USER/.inputrc
 	touch /root/.inputrc
-	echo 'source ~/.bash_prompt' >> /home/$_USER/.bashrc'
+	echo 'source ~/.bash_prompt' >> /home/$_USER/.bashrc
 	echo '"\e[A]":history-search-backward' >> /root/.inputrc
 	echo '"\e[B]":history-search-forward' >> /root/.inputrc
 	echo '"\e[A]":history-search-backward' >> /home/$_USER/.inputrc
 	echo '"\e[B]":history-search-forward' >> /home/$_USER/.inputrc
-	echo 'source ~/.inputrc' >> /root/.bashrc'
-	echo 'source ~/.inputrc' >> /home/$_USER/.bashrc'
-	# Tab completion
+	echo 'source ~/.inputrc' >> /root/.bashrc
+	echo 'source ~/.inputrc' >> /home/$_USER/.bashrc
 	echo '. /etc/bash_completion' >> /home/$_USER/.bashrc
-	echo '. /etc/bash_completion' >> /root/$_USER/.bashrc
+	echo '. /etc/bash_completion' >> /root/.bashrc
 }
 
 function setup_vim {
