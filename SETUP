@@ -15,7 +15,7 @@ echo 'Choose the hostname you want for this system:'
 #echo 'Thanks. Initializing setup...'
 
 # global pkgs
-$PKG_LIST=(vim git curl ack inetutils* kernel-package libssl-dev openssl vim-pathogen tshark)	
+PKG_LIST=( vim git curl ack inetutils* kernel-package libssl-dev openssl vim-pathogen tshark )	
 
 function run! {
 	update_system
@@ -30,18 +30,18 @@ function run! {
 }
 
 function update_system {
-	dialog('Bringing the system up to date...')
+	dialog 'Bringing the system up to date...'
 	sudo apt-get update && sudo apt-get upgrade -y
 	sudo apt-get dist-upgrade -y
 }
 
 function install_libs {
-	dialog('Installing pkg list...')
+	dialog 'Installing pkg list...'
 	sudo apt-get install -y $PKG_LIST	
 }
 
 function create_user {
-	dialog('Creating user "$_USER"...')
+	dialog 'Creating user "$_USER"...'
 	mkdir -p /home/$_USER
 	useradd -s /bin/bash -d /home/$_USER $_USER
 	ln -s /root/Desktop /home/$_USER/Desktop
@@ -56,7 +56,7 @@ function set_user_permissions {
 }
 
 function setup_bash {
-	dialog('Setting up bash env...')
+	dialog 'Setting up bash env...'
 	touch /home/$_USER/.bashrc
 	touch /home/$_USER/.bash_profile
 	touch /home/$_USER/.bash_prompt
@@ -74,7 +74,7 @@ function setup_bash {
 }
 
 function setup_vim {
-	dialog('Setting up vim...')
+	dialog 'Setting up vim...'
 	touch /root/.vimrc
 	touch /home/$_USER/.vimrc
 	mkdir /root/.vim/bundle -p
@@ -82,34 +82,34 @@ function setup_vim {
 }
 
 function setup_keymaps {
-	dialog('Setting up keymaps..')
+	dialog 'Setting up keymaps..'
 	echo '$(cat /etc/defaults/keyboard | grep XBOPTIONS)' >> /tmp/km
 	echo 'XBOPTIONS="ctrl:nocaps"'
 	cat /tmp/km > /etc/default/keyboard
 }
 
 function change_hostname {
-	dialog('Changing hostname to "$HOST"...')
+	dialog 'Changing hostname to "$HOST"...'
 	echo $_HOSTNAME > /etc/hostname
 	sed -i 's/kali/$_HOSTNAME/g' /etc/hosts
 }
 
 function setup_temp_git {
-	dialog('Setting up temporary git user...')
+	dialog 'Setting up temporary git user...'
 	git config --global git.email "Trailer@bob.com"
 	git config --global git.name "Trailer Bob"
 }
 
 function setup_ssh {
-	dialog('Generating new ssh_key for root...')
+	dialog 'Generating new ssh_key for root...'
 	cd ~
-	dialog("Generating keypairs, You'll need to enter your password.")
+	dialog "Generating keypairs, You'll need to enter your password."
 	ssh-keygen
 }
 
 
 function clean {
-	warning("You've just deleted all your work.")
+	warning "You've just deleted all your work." 
 	# clean root
 	rm -rf /root/.ssh
 	rm /root/.gitconfig
@@ -131,20 +131,20 @@ function clean {
 
 
 
-function warning(text) {
+function warning {
 	echo "******************************"
 	echo "******     WARNING     *******"
 	echo "|| "
-	echo "  $text" | awk "{print toupper($0)}"
+	echo "  $1" | awk "{print toupper($0)}"
 	echo "|| "
 	echo "******************************"
 	echo "******************************"
 }
 
-function dialog(text) {
+function dialog {
 	echo "*============================="
 	echo "|| "
-	echo "||  $text"
+	echo "||  $1"
 	echo "|| "
 	echo "*============================="
 }
