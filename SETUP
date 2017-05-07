@@ -1,17 +1,19 @@
 #/usr/bin/env bash
 
-read 'Hello'
-
-
 # KALI SETUP SCRIPT
 #  
 # - Setup non-root uxer
 # - Install core system updates
 # - Setup dev
+#
+#-------------------------------------
 
-$_USER=sysadmin
-$_HOSTNAME=netmon1
+echo 'Choose the hostname you want for this system:'
+read _HOSTNAME
+echo 'What do you want to name your main sudo user?'
+read _USER
 
+echo 'Thanks. Initializing setup..."
 
 # global pkgs
 $PKG_LIST=(	vim  
@@ -57,6 +59,7 @@ function create_user {
 	chmod -R /root/Downloads $_USER
 	ln -s /root/Desktop /home/$_USER/desktop
 	ln -s /root/Downloads /home/$_USER/Downloads
+	echo '$_USER	ALL=(ALL:ALL) ALL'
 }
 
 function setup_bash {
@@ -128,6 +131,8 @@ function clean {
 	
 	# clean installs
 	sudo apt-get remove -y	$PKG_LIST
+	echo 'kali' > /etc/hostname
+	sed -i 's/$_HOSTNAME/kali/g' /etc/hosts
 }
 
 
