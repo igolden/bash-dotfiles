@@ -9,24 +9,13 @@
 #-------------------------------------
 
 echo 'Choose the hostname you want for this system:'
-read _HOSTNAME
-echo 'What do you want to name your main sudo user?'
-read _USER
-
-echo 'Thanks. Initializing setup..."
+#read _HOSTNAME
+#echo 'What do you want to name your main sudo user?'
+#read _USER 
+#echo 'Thanks. Initializing setup...'
 
 # global pkgs
-$PKG_LIST=(	vim  
-		git  
-		curl  
-		ack 
-		inetutils* 
-		kernel-package 
-		libssl-dev 
-		openssl 
-		vim-pathogen 
-		tshark 
-		)
+$PKG_LIST=(vim git curl ack inetutils* kernel-package libssl-dev openssl vim-pathogen tshark)	
 
 function run! {
 	update_system
@@ -146,7 +135,7 @@ function warning(text) {
 	echo "******************************"
 	echo "******     WARNING     *******"
 	echo "|| "
-	echo "||  $text" | awk '{print toupper($0)}'
+	echo "  $text" | awk "{print toupper($0)}"
 	echo "|| "
 	echo "******************************"
 	echo "******************************"
