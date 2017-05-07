@@ -59,7 +59,7 @@ function create_user {
 	chmod -R /root/Downloads $_USER
 	ln -s /root/Desktop /home/$_USER/desktop
 	ln -s /root/Downloads /home/$_USER/Downloads
-	echo '$_USER	ALL=(ALL:ALL) ALL'
+	echo "$_USER	ALL=(ALL:ALL) ALL"
 }
 
 function setup_bash {
@@ -67,6 +67,8 @@ function setup_bash {
 	touch /home/$_USER/.bashrc
 	touch /home/$_USER/.bash_profile
 	touch /home/$_USER/.bash_prompt
+	touch /home/$_USER/.inputrc
+	touch /root/.inputrc
 	echo 'source ~/.bash_prompt' >> /home/$_USER/.bashrc'
 	echo '"\e[A]":history-search-backward' >> /root/.inputrc
 	echo '"\e[B]":history-search-forward' >> /root/.inputrc
