@@ -20,12 +20,78 @@ function run! {
 	package_dotfiles
 }
 
+function update_system {
+	dialog('Bringing the system up to date...')
+	sudo apt-get update && sudo apt-get upgrade -y
+	sudo apt-get dist-upgrade -y
+}
+
+function install_libs {
+	sudo apt-get install -y	vim \
+				git \
+				curl \
+				ack \
+				inetutils* \
+				kernel-package \
+				libssl-dev \
+				openssl \
+				vim-pathogen \
+				tshark \
+}
+
+function create_user {
+	useradd -s /bin/bash -d /home/$USER $USER
+	chmod -R /home/$USER $USER
+	chmod -R /root/Desktop $USER
+	chmod -R /root/Downloads $USER
+	ln -s /root/Desktop /home/$USER/desktop
+	ln -s /root/Downloads /home/$USER/Downloads
+}
+
+function setup_bash {
+	touch /home/$USER/.bashrc
+	touch /home/$USER/.bash_profile
+	touch /home/$USER/.bash_prompt
+	echo 'source ~/.bash_prompt' >> /home/$USER/.bashrc'
+	echo '"\e[A]":history-search-backward' >> /root/.inputrc
+	echo '"\e[B]":history-search-forward' >> /root/.inputrc
+	echo '"\e[A]":history-search-backward' >> /home/$USER/.inputrc
+	echo '"\e[B]":history-search-forward' >> /home/$USER/.inputrc
+	echo 'source ~/.inputrc' >> /root/.bashrc'
+	echo 'source ~/.inputrc' >> /home/$USER/.bashrc'
+	# Tab completion
+	echo '. /etc/bash_completion' >> /home/$USER/.bashrc
+	echo '. /etc/bash_completion' >> /root/$USER/.bashrc
+}
+
+function setup_vim {
+	touch /root/.vimrc
+	touch /home/$USER/.vimrc
+	mkdir /root/.vim/bundle -p
+	mkdir /home/$USER/.vim/bundle -p
+}
+
+function setup_keymaps {
+	echo '$(cat /etc/defaults/keyboard | grep XBOPTIONS)' >> /tmp/km
+	echo 'XBOPTIONS="ctrl:nocaps"'
+	cat /tmp/km > /etc/default/keyboard
+}
+
+function change_hostname {
+	echo $HOSTNAME > /etc/hostname
+	sed -i 's/kali/$HOSTNAME/g' /etc/hosts
+}
+
+
+
 function setup_temp_git {
+	dialog('Setting up temporary git user...')
 	git config --global git.email "Trailer@bob.com"
 	git config --global git.name "Trailer Bob"
 }
 
 function setup_ssh {
+	dialog('Generating new ssh_key')
 	cd ~
 	dialog("Generating keypairs, You'll need to enter your password.")
 	ssh-keygen
@@ -37,8 +103,12 @@ function clean {
 	rm /root/.gitconfig
 	rm /root/.bashrc && touch /root/.bashrc
 	rm /root/.bash_profile && touch /root/.bash_profile
-	rm /root/.vimrc
+	rm -rf /root/.vim*
 		
+	rm -rf /home/$USER
+	rm -rf /home/$USER/.vim*
+	chmod /root/Desktop root
+	chmod /root/Downloads root
 }
 
 
