@@ -1,26 +1,29 @@
 #/usr/bin/env bash
 
+read 'Hello'
+
+
 # KALI SETUP SCRIPT
 #  
 # - Setup non-root uxer
 # - Install core system updates
 # - Setup dev
 
-$USER=sysadmin
-$HOSTNAME=netmon1
+$_USER=sysadmin
+$_HOSTNAME=netmon1
 
 
 # global pkgs
-$PKG_LIST=(	vim \ 
-		git \ 
-		curl \ 
-		ack \
-		inetutils* \
-		kernel-package \
-		libssl-dev \
-		openssl \
-		vim-pathogen \
-		tshark \
+$PKG_LIST=(	vim  
+		git  
+		curl  
+		ack 
+		inetutils* 
+		kernel-package 
+		libssl-dev 
+		openssl 
+		vim-pathogen 
+		tshark 
 		)
 
 function run! {
@@ -46,39 +49,39 @@ function install_libs {
 }
 
 function create_user {
-	dialog('Creating user "$USER"...')
-	mkdir -p /home/$USER
-	useradd -s /bin/bash -d /home/$USER $USER
-	chmod -R /home/$USER $USER
-	chmod -R /root/Desktop $USER
-	chmod -R /root/Downloads $USER
-	ln -s /root/Desktop /home/$USER/desktop
-	ln -s /root/Downloads /home/$USER/Downloads
+	dialog('Creating user "$_USER"...')
+	mkdir -p /home/$_USER
+	useradd -s /bin/bash -d /home/$_USER $_USER
+	chmod -R /home/$_USER $_USER
+	chmod -R /root/Desktop $_USER
+	chmod -R /root/Downloads $_USER
+	ln -s /root/Desktop /home/$_USER/desktop
+	ln -s /root/Downloads /home/$_USER/Downloads
 }
 
 function setup_bash {
 	dialog('Setting up bash env...')
-	touch /home/$USER/.bashrc
-	touch /home/$USER/.bash_profile
-	touch /home/$USER/.bash_prompt
-	echo 'source ~/.bash_prompt' >> /home/$USER/.bashrc'
+	touch /home/$_USER/.bashrc
+	touch /home/$_USER/.bash_profile
+	touch /home/$_USER/.bash_prompt
+	echo 'source ~/.bash_prompt' >> /home/$_USER/.bashrc'
 	echo '"\e[A]":history-search-backward' >> /root/.inputrc
 	echo '"\e[B]":history-search-forward' >> /root/.inputrc
-	echo '"\e[A]":history-search-backward' >> /home/$USER/.inputrc
-	echo '"\e[B]":history-search-forward' >> /home/$USER/.inputrc
+	echo '"\e[A]":history-search-backward' >> /home/$_USER/.inputrc
+	echo '"\e[B]":history-search-forward' >> /home/$_USER/.inputrc
 	echo 'source ~/.inputrc' >> /root/.bashrc'
-	echo 'source ~/.inputrc' >> /home/$USER/.bashrc'
+	echo 'source ~/.inputrc' >> /home/$_USER/.bashrc'
 	# Tab completion
-	echo '. /etc/bash_completion' >> /home/$USER/.bashrc
-	echo '. /etc/bash_completion' >> /root/$USER/.bashrc
+	echo '. /etc/bash_completion' >> /home/$_USER/.bashrc
+	echo '. /etc/bash_completion' >> /root/$_USER/.bashrc
 }
 
 function setup_vim {
 	dialog('Setting up vim...')
 	touch /root/.vimrc
-	touch /home/$USER/.vimrc
+	touch /home/$_USER/.vimrc
 	mkdir /root/.vim/bundle -p
-	mkdir /home/$USER/.vim/bundle -p
+	mkdir /home/$_USER/.vim/bundle -p
 }
 
 function setup_keymaps {
@@ -90,8 +93,8 @@ function setup_keymaps {
 
 function change_hostname {
 	dialog('Changing hostname to "$HOST"...')
-	echo $HOSTNAME > /etc/hostname
-	sed -i 's/kali/$HOSTNAME/g' /etc/hosts
+	echo $_HOSTNAME > /etc/hostname
+	sed -i 's/kali/$_HOSTNAME/g' /etc/hosts
 }
 
 function setup_temp_git {
@@ -118,8 +121,8 @@ function clean {
 	rm -rf /root/.vim*
 		
 	# clean user
-	rm -rf /home/$USER
-	rm -rf /home/$USER/.vim*
+	rm -rf /home/$_USER
+	rm -rf /home/$_USER/.vim*
 	chmod /root/Desktop root
 	chmod /root/Downloads root
 	
